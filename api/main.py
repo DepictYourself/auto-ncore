@@ -1,5 +1,7 @@
+#! python3.11
+
 import time
-from fastapi import FastApi
+from fastapi import FastAPI, Response
 from transmission_rpc import Client
 
 # host = "192.168.0.1"
@@ -16,7 +18,12 @@ from transmission_rpc import Client
 #     print(i)
 
 
-app = FastApi()
+app = FastAPI()
 
 
-print('ending..')
+@app.get('/')
+def read_root() -> Response:
+    return Response("The server is running.")
+
+
+
