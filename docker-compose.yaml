@@ -1,0 +1,10 @@
+services:
+  api:
+    build: ./apps/api
+    container_name: auto-ncore-api
+    command: python main.py
+    # command: uvicorn main:app --host 0.0.0.0 --port 3000 --reload
+    ports:
+      - 3000:3000
+    volumes:
+      - ./apps/api:/app
