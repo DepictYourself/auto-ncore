@@ -35,7 +35,7 @@ services:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
 
   transmission:
-    image: linuxserver/transmission
+    image: linuxserver/transmission:arm32v7-version-3.00-r8
     container_name: transmission
     ports:
       - "9091:9091"
