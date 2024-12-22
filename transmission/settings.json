@@ -45,7 +45,7 @@
     "rpc-enabled": true,
     "rpc-host-whitelist": "",
     "rpc-host-whitelist-enabled": false,
-    "rpc-password": "{7f8c325c2daebd31406d3680dc255fdc3a293054I4kH6j1A",
+    "rpc-password": "{32d0c2ad58ab656e56c61985ce12ead7f0bd04fapel6MbMm",
     "rpc-port": 9091,
     "rpc-url": "/transmission/",
     "rpc-username": "admin",

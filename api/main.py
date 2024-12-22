@@ -1,22 +1,26 @@
 #! python3.11
-
+import os
 import time
 from fastapi import FastAPI, Response
 from transmission_rpc import Client
 
-# host = "192.168.0.1"
-# port = 9091
-# username = ""
-# password = ""
 
-# test_torrent_url = ""
+TRANSMISSION_HOST = os.getenv('TRANSMISSION_HOST', 'localhost')
+TRANSMISSION_PORT = int(os.getenv('TRANSMISSION_PORT', 9091))
+TRANSMISSION_USER = os.getenv('TRANSMISSION_USER')
+TRANSMISSION_PASS = os.getenv('TRANSMISSION_PASS')
 
-# print('started')
-# transmission_client = Client(host=host, port=port, username=username, password = password)
-# torrents = transmission_client.get_torrents()
-# for i in torrents:
-#     print(i)
+print('torrent host: ', TRANSMISSION_HOST)
+print('torrent port: ', TRANSMISSION_PORT)
+print('torrent user: ', TRANSMISSION_USER)
+print('torrent pw: ', TRANSMISSION_PASS)
 
+client = Client(
+    host=TRANSMISSION_HOST,
+    port=TRANSMISSION_PORT,
+    username=TRANSMISSION_USER,
+    password=TRANSMISSION_PASS
+)
 
 app = FastAPI()
 
@@ -26,4 +30,6 @@ def read_root() -> Response:
     return Response("The server is running.")
 
 
-
+@app.get('/torrents')
+def get_torrents() -> Response:
+    return client.get_torrents()
