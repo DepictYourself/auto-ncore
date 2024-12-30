@@ -1,10 +1,17 @@
+from api.infrastructure.config_service import ConfigService
 from infrastructure.transmission_client import TransmissionClient
 from infrastructure.kodi_directory_mapper import KodiDirectoryMapper
 
 
 class TorrentService:
-    def __init__(self, client: TransmissionClient):
-        self.client = client
+    def __init__(self):
+        config = ConfigService().get_tranmission_config()
+        self.client = TransmissionClient(
+            host=config["host"],
+            port=config["port"],
+            username=config["username"],
+            password=config["password"]
+        )
 
     def list_torrents(self):
         return self.client.get_torrents()

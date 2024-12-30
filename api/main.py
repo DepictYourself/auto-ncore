@@ -14,14 +14,7 @@ NCORE_PASS = os.getenv('NCORE_PASS')
 app = FastAPI()
 
 
-client = TransmissionClient(
-    host=os.getenv('TRANSMISSION_HOST', 'localhost'),
-    port=int(os.getenv('TRANSMISSION_PORT', 9091)),
-    username=os.getenv('TRANSMISSION_USER'),
-    password=os.getenv('TRANSMISSION_PASS')
-)
-
-service = TorrentService(client)
+service = TorrentService()
 
 
 @app.get('/')
