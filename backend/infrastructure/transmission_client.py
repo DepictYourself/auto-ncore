@@ -1,9 +1,17 @@
 from typing import List
 from transmission_rpc import Client, Torrent
 
+from infrastructure.config_service import ConfigService
+
 class TransmissionClient:
-    def __init__(self, host, port, username, password):
-        self.client = Client(host=host, port=port, username=username, password=password)
+    def __init__(self, configService: ConfigService):
+        config = configService.get_tranmission_config()
+        self.client = Client(
+            host=config["host"],
+            port=config["port"],
+            username=config["username"],
+            password=config["password"]
+        )
 
     def get_torrents(self) -> List[Torrent]:
         return self.client.get_torrents()

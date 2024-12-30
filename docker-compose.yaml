@@ -1,18 +1,19 @@
 services:
-  api:
+  backend:
     build: 
-      context: ./api
-    container_name: auto-ncore-api
+      context: ./backend
+    container_name: auto-ncore-backend
     command: uvicorn main:app --host 0.0.0.0 --port 3000 --reload
     ports:
       - 3000:3000
+      - 5678:5678
     env_file:
-      - path: ./api/.env
+      - path: ./backend/.env
         required: true
     environment:
       - APP_ENV=development
     volumes:
-      - ./api:/app
+      - ./backend:/app
     depends_on:
       - transmission
 
@@ -28,10 +29,11 @@ services:
   nginx:
     build:
       context: ./nginx
+    container_name: auto-ncore-frontend
     ports: 
       - "85:80"
     depends_on:
-      - api
+      - backend
       # - frontend
     volumes:
       - /tmp/mnt/Intenso/www:/usr/share/nginx/html:ro

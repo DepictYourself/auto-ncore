@@ -1,17 +1,12 @@
-from api.infrastructure.config_service import ConfigService
+from domain.torrent_category import TorrentCategory
+from infrastructure.config_service import ConfigService
+from infrastructure.ncore_client import NCoreClient
 from infrastructure.transmission_client import TransmissionClient
-from infrastructure.kodi_directory_mapper import KodiDirectoryMapper
 
 
-class TorrentService:
+class TorrentClientService:
     def __init__(self):
-        config = ConfigService().get_tranmission_config()
-        self.client = TransmissionClient(
-            host=config["host"],
-            port=config["port"],
-            username=config["username"],
-            password=config["password"]
-        )
+        self.client = TransmissionClient
 
     def list_torrents(self):
         return self.client.get_torrents()
@@ -26,6 +21,10 @@ class TorrentService:
         # TODO: get download directory based on metadata
         # download_dir = KodiDirectoryMapper.get_directory(category=metadata.category)
         download_dir = "/dowloads"
+        
+        # TODO: Remove the hardcoded torrent url
+        ncore_key = ConfigService().get_ncore_config()["key"]
+        url = f"https://ncore.pro/torrents.php?action=download&id=3857432&key={ncore_key}"
 
         return self.client.add_torrent(url, dir=download_dir)
     
@@ -38,3 +37,11 @@ class TorrentService:
     
     def start_torrent(self, id: int | str):
         return self.client.start_torrent(id)
+    
+
+class TrackerService:
+    def __init__(self):
+        self.client = NCoreClient
+
+    def search_torrent(self, pattern: str, category: TorrentCategory):
+        return self.client.search_torrents(pattern, category)

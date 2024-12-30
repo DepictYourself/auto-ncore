@@ -15,7 +15,8 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 COPY ./requirements.txt /app
-RUN pip install --no-cache-dir --upgrade -r requirements.txt
+RUN pip install --no-cache-dir --upgrade -r requirements.txt \
+    && pip install --no-cache-dir debugpy
 
 
 # Remove build tools after dependencies are installed.
@@ -24,5 +25,8 @@ RUN apt-get remove -y gcc g++ make libffi-dev musl-dev && apt-get autoremove -y
 
 COPY . /app
 
+# Expose port 5678 for the debugger
+EXPOSE 5678 5678
+
 # start the server
-CMD [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80" ]
+CMD ["python", "-m", "debugpy", "--wait-for-client", "--listen", "0.0.0.0:5678", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80" ]

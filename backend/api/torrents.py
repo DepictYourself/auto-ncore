@@ -1,36 +1,18 @@
-#! python3.11
-import os
-from fastapi import FastAPI, Response
+from fastapi import APIRouter, Response
+from application.services import TorrentClientService
 
-from application.services import TorrentService
+router = APIRouter()
+torrent_client_service = TorrentClientService()
 
-from infrastructure.transmission_client import TransmissionClient
-
-
-NCORE_KEY = os.getenv('NCORE_KEY')
-NCORE_USER = os.getenv('NCORE_USER')
-NCORE_PASS = os.getenv('NCORE_PASS')
-
-app = FastAPI()
-
-
-service = TorrentService()
-
-
-@app.get('/')
-def read_root() -> Response:
-    return Response("Ok.", media_type="text/html; charset=utf-8")
-
-
-@app.get('/torrents')
+@router.get('/')
 def get_torrents() -> Response:
-    return service.list_torrents()
+    return torrent_client_service.list_torrents()
 
 
-@app.get('/torrents/{hash_string}')
+@router.get('/{hash_string}')
 def get_torrent(hash_string: str) -> Response:
     try:
-        torrent = service.get_torrent(hash_string)
+        torrent = torrent_client_service.get_torrent(hash_string)
         return {
             "id": torrent.id, "name": torrent.name, "progress": torrent.progress,
             "status": torrent.status
@@ -39,37 +21,37 @@ def get_torrent(hash_string: str) -> Response:
         return {"error": str(e)}
 
 
-@app.post('/torrents')
+@router.post('/')
 def add_torrent(url: str) -> Response:
     try:
-        torrent = service.add_torrent()
+        torrent = torrent_client_service.add_torrent()
         return { "message": "Torrent added successfully.", "torrent_id": torrent.id}
     except Exception as e:
         return { "error": str(e)}
     
 
-@app.delete('/torrents/{hash_string}')
+@router.delete('/{hash_string}')
 def remove_torrent(hash_string: str) -> Response:
     try:
-        service.remove_torrent(hash_string)
+        torrent_client_service.remove_torrent(hash_string)
         return { "message": f"Torrent {hash_string} removed successfully."}
     except Exception as e:
         return { "error": str(e) }
 
 
-@app.post('/torrents/{hash_string}/pause')
+@router.post('/{hash_string}/pause')
 def pause_torrent(hash_string: str) -> Response:
     try:
-        service.stop_torrent(hash_string)
+        torrent_client_service.stop_torrent(hash_string)
         return {"message": f"Torrent {hash_string} paused successfully."}
     except Exception as e:
         return {"error": str(e)}
     
 
-@app.post('/torrents/{hash_string}/resume')
+@router.post('/{hash_string}/resume')
 def resume_torrent(hash_string: str) -> Response:
     try:
-        service.start_torrent(hash_string)
+        torrent_client_service.start_torrent(hash_string)
         return {"message": f"Torrent {hash_string} resumed successfully."}
     except Exception as e:
         return {"error": str(e)}

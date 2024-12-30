@@ -1,4 +1,4 @@
-from api.domain.download_location_mapper import DownloadLocationMapper
+from domain.download_location_mapper import DownloadLocationMapper
 
 
 class KodiDirectoryMapper(DownloadLocationMapper):
