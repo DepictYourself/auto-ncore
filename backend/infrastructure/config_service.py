@@ -20,9 +20,9 @@ class ConfigService:
         load_dotenv()
 
         # Transmission credentials
-        self.transmission_host=os.getenv('TRANSMISSION_HOST', 'localhost'),
-        self.transmission_port=int(os.getenv('TRANSMISSION_PORT', 9091)),
-        self.transmission_username=os.getenv('TRANSMISSION_USER'),
+        self.transmission_host=os.getenv('TRANSMISSION_HOST', 'localhost')
+        self.transmission_port=int(os.getenv('TRANSMISSION_PORT', 9091))
+        self.transmission_username=os.getenv('TRANSMISSION_USER')
         self.transmission_password=os.getenv('TRANSMISSION_PASS')
 
         # NCore credentials
@@ -32,19 +32,20 @@ class ConfigService:
 
 
     def get_tranmission_config(self) -> TranmissionConfig:
-        return {
+        config = {
             "host": self.transmission_host,
             "port": self.transmission_port,
             "username": self.transmission_username,
             "password": self.transmission_password
         }
+        print("transmission config: ", config)
+        return config
 
     def get_ncore_config(self) -> NcoreConfig:
-        return {
+        config = {
             "username": self.ncore_username,
             "password": self.ncore_password,
             "key": self.ncore_key
         }
-    
-    
-
+        print("ncore config: ", config)
+        return config
