@@ -4,8 +4,8 @@ from transmission_rpc import Client, Torrent
 from infrastructure.config_service import ConfigService
 
 class TransmissionClient:
-    def __init__(self, configService: ConfigService):
-        config = configService.get_tranmission_config()
+    def __init__(self, config_service: ConfigService):
+        config = config_service.get_tranmission_config()
         self.client = Client(
             host=config["host"],
             port=config["port"],

@@ -6,7 +6,8 @@ from infrastructure.transmission_client import TransmissionClient
 
 class TorrentClientService:
     def __init__(self):
-        self.client = TransmissionClient
+        self.config_service = ConfigService()
+        self.client = TransmissionClient(self.config_service)
 
     def list_torrents(self):
         return self.client.get_torrents()
@@ -23,7 +24,7 @@ class TorrentClientService:
         download_dir = "/dowloads"
         
         # TODO: Remove the hardcoded torrent url
-        ncore_key = ConfigService().get_ncore_config()["key"]
+        ncore_key = self.config_service.get_ncore_config()["key"]
         url = f"https://ncore.pro/torrents.php?action=download&id=3857432&key={ncore_key}"
 
         return self.client.add_torrent(url, dir=download_dir)

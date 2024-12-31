@@ -8,8 +8,8 @@ class NCoreClient:
         
         self.client: Client | None = None
 
-    def __enter__(self, configService: ConfigService):
-        config = configService.get_ncore_config()
+    def __enter__(self, config_service: ConfigService):
+        config = config_service.get_ncore_config()
         self.client = Client()
         self.client.login(
             username=config['username'],
