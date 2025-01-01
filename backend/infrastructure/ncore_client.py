@@ -4,17 +4,15 @@ from infrastructure.config_service import ConfigService
 from ncoreparser import Client, SearchParamType, ParamSort, ParamSeq
 
 class NCoreClient:
-    def __init__(self):
-        
-        self.client: Client | None = None
-
-    def __enter__(self, config_service: ConfigService):
+    def __init__(self, config_service: ConfigService):
         config = config_service.get_ncore_config()
         self.client = Client()
         self.client.login(
             username=config['username'],
             password=config["password"]
         )
+
+    def __enter__(self):
         return self
     
     def __exit__(self, exc_type, exc_value, traceback):

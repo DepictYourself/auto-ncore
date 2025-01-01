@@ -42,7 +42,8 @@ class TorrentClientService:
 
 class TrackerService:
     def __init__(self):
-        self.client = NCoreClient
+        self.config_service = ConfigService()
+        self.client = NCoreClient(self.config_service)
 
     def search_torrent(self, pattern: str, category: TorrentCategory):
         return self.client.search_torrents(pattern, category)
