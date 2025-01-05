@@ -1,3 +1,5 @@
+from backend.api.torrents import TorrentDTO
+from backend.infrastructure.kodi_directory_mapper import KodiDirectoryMapper
 from domain.torrent_category import TorrentCategory
 from infrastructure.config_service import ConfigService
 from infrastructure.ncore_client import NCoreClient
@@ -8,6 +10,7 @@ class TorrentClientService:
     def __init__(self):
         self.config_service = ConfigService()
         self.client = TransmissionClient(self.config_service)
+        self.ncore_client = NCoreClient(self.config_service)
 
     def list_torrents(self):
         return self.client.get_torrents()
@@ -15,17 +18,10 @@ class TorrentClientService:
     def torrent_info(self, id: int | str):
         return self.client.get_torrent(id)
     
-    def add_torrent(self, ncore_torrent_id):
-        # TODO: get metadata for download directory
-        # metadata = ncore.get_metadata(ncore_torrent_id)
-
-        # TODO: get download directory based on metadata
-        # download_dir = KodiDirectoryMapper.get_directory(category=metadata.category)
-        download_dir = "/dowloads"
+    def add_torrent(self, torrent: TorrentDTO):
+        download_dir = KodiDirectoryMapper.get_directory(category=torrent.type)
         
-        # TODO: Remove the hardcoded torrent url
-        ncore_key = self.config_service.get_ncore_config()["key"]
-        url = f"https://ncore.pro/torrents.php?action=download&id=3857432&key={ncore_key}"
+        url = torrent.download
 
         return self.client.add_torrent(url, dir=download_dir)
     

@@ -74,5 +74,5 @@ class NCoreClient:
         return list(unique_results)
     
 
-    def get_torrent_info(self):
-        self.client.get_torrent()
+    def get_torrent_info(self, id):
+        return self.client.get_torrent(id)
