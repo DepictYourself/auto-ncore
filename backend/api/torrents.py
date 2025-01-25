@@ -1,24 +1,8 @@
-from typing import Literal
 from fastapi import APIRouter, Response
-from pydantic import BaseModel, Field, HttpUrl
 from application.services import TorrentClientService
+from api.request import TorrentDTO
 
-class TorrentDTO(BaseModel):
-    id: str
-    title: str
-    key: str
 
-    class Size(BaseModel):
-        _unit: Literal["GiB", "MiB", "KiB"]
-        _size: float
-
-    size: Size
-    type: str
-    date: str
-    seed: int = Field(..., ge=0)
-    leech: int = Field(..., ge=0)
-    download: HttpUrl
-    url: HttpUrl
 
 
 router = APIRouter()
@@ -75,3 +59,12 @@ def resume_torrent(hash_string: str) -> Response:
         return {"message": f"Torrent {hash_string} resumed successfully."}
     except Exception as e:
         return {"error": str(e)}
+
+@router.get('/test/{query_string}')
+def test(query_string: str) -> Response:
+    return torrent_client_service.test_tmdb(query_string)
+
+
+@router.get('/show_details/{show_id}')
+def testtest(show_id: str) -> Response:
+    return torrent_client_service.test_show_details(show_id)
