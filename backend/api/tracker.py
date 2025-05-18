@@ -28,3 +28,10 @@ def get_one(ncore_id):
         return tracker_client_service.get_details(ncore_id)
     except Exception as e:
         return { "error": str(e)}
+    
+@router.get('/test/{title}')
+def test(title: str):
+    try:
+        return tracker_client_service.shows(title)
+    except Exception as e:
+        return { "error": str(e)}

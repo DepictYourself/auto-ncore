@@ -60,6 +60,7 @@ def resume_torrent(hash_string: str) -> Response:
     except Exception as e:
         return {"error": str(e)}
 
+
 @router.get('/test/{query_string}')
 def test(query_string: str) -> Response:
     return torrent_client_service.test_tmdb(query_string)

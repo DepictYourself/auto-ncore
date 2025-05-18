@@ -10,12 +10,40 @@
           "--build",
           "--remove-orphans"
         ],
-        "group": {
-          "kind": "build",
-          "isDefault": true
+        "isBackground": true,
+        "problemMatcher": {
+            "pattern": [
+                {
+                    "regexp": ".",
+                    "file": 1,
+                    "location": 2,
+                    "message": 3
+                }
+            ],
+            "background": {
+                "activeOnStart": true,
+                "beginsPattern": ".*",
+                "endsPattern": "Uvicorn running on|Application startup complete"
+            }
         },
-        "problemMatcher": [],
-        "dependsOn": []
-      }
+        "presentation": {
+            "reveal": "always",
+        },
+        "group": {
+            "kind": "build",
+            "isDefault": true
+        }
+      },
+        {
+            "label": "Run App (No Debug)",
+            "type": "shell",
+            "command": "docker-compose",
+            "args": [
+                "up",
+                "--build",
+                "--remove-orphans"
+            ],
+            "isBackground": false
+        }
     ]
   }

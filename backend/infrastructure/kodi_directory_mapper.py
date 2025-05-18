@@ -1,10 +1,14 @@
 from domain.download_location_mapper import DownloadLocationMapper
 from domain.torrent_category import TorrentCategory
+from infrastructure.config_service import ConfigService
 
 
 class KodiDirectoryMapper(DownloadLocationMapper):
 
-    def map_category(type: str) -> TorrentCategory:
+    def __init__(self, config_service: ConfigService):
+        self.config = config_service.get_kodi_config()
+
+    def map_category(self, type: str) -> TorrentCategory:
         type_mappings = {
             "xvid_hun": TorrentCategory.MOVIE,
             "xvid": TorrentCategory.MOVIE,
@@ -41,10 +45,7 @@ class KodiDirectoryMapper(DownloadLocationMapper):
         }
         return type_mappings[type]
 
-    def get_tvshow_directory(self, show_name, release_year, season_number, episode_name) -> str:
-        # if category == 'show' and metadata:
-        #     show_name = metadata.get("show_name", "unknown_show")
-        #     season_number = metadata.get("season_number", "unknown_season")
-        #     episode_name = metadata.get("episode_name", "unknown_episode")
-        #     return f"{base_directory}/{show_name}/season {season_number}/{episode_name}"
-        return ""
+
+    def get_tvshow_directory(self, show_name, release_year, season_number) -> str:
+        return f"{show_name}.{release_year}/season {season_number}/"
+    

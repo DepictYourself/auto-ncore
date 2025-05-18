@@ -5,7 +5,8 @@ import requests
 class TmdbClient:
     def __init__(self, config_service: ConfigService):
         self.config = config_service.get_tmdb_config()
-        
+
+
     def _get_headers(self):
         return {
             "Authorization": f"Bearer {self.config['jwt']}",
@@ -16,7 +17,6 @@ class TmdbClient:
     def search_show(self, query_string, include_adult=False, language="en-US", result_page=1):
         url = self.config["url"]
         headers = self._get_headers()
-
         response = requests.get(
             url+"/search/tv",
             params={
@@ -27,9 +27,9 @@ class TmdbClient:
             },
             headers=headers
         )
-
         return response.json()
     
+
     def get_show_details(self, id, language="en-US"):
         url = self.config["url"]
         response = requests.get(

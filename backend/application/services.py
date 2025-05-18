@@ -14,6 +14,7 @@ class TorrentClientService:
         self.client = TransmissionClient(self.config_service)
         self.ncore_client = NCoreClient(self.config_service)
         self.tmdb_client = TmdbClient(self.config_service)
+        self.kodi_dir_mapper = KodiDirectoryMapper(self.config_service)
 
     def list_torrents(self):
         return self.client.get_torrents()
@@ -22,16 +23,30 @@ class TorrentClientService:
         return self.client.get_torrent(id)
     
     def add_torrent(self, torrent: TorrentDTO):
+        print("services.py add_torrent() called.")
+        category = self.kodi_dir_mapper.map_category(type=torrent.type)
+        print("category: ", category)
         
-        category = KodiDirectoryMapper.map_category(type=torrent.type)
         download_dir = self.config_service.get_tranmission_config()['dir']
+        subdir = "/"
         if(category == TorrentCategory.SHOW):
-            self.tmdb_client.search_show(torrent.title)
-            download_dir = KodiDirectoryMapper.get_directory()
-        
+            tmdb_result = self.tmdb_client.search_show(torrent.title)
+            print("tmdb_result: ", tmdb_result)
+            show_name = ""
+            release_year = ""
+            season_number = 0
+            subdir += self.kodi_dir_mapper.get_tvshow_directory(
+                show_name,
+                release_year,
+                season_number
+            )
+        elif(category == TorrentCategory.MOVIE):
+            subdir += "movies/"
+
+        download_dir += subdir
         url = torrent.download
 
-        return self.client.add_torrent(url, dir=download_dir)
+        #return self.client.add_torrent(url, dir=download_dir)
     
 
     def remove_torrent(self, id: int | str):
@@ -63,3 +78,6 @@ class TrackerService:
     
     def get_details(self, ncore_id):
         return self.client.get_torrent_info(ncore_id)
+    
+    def shows(self, title: str):
+        return self.client.parse_tvshow_title(title)
