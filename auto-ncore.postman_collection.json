@@ -1,0 +1,201 @@
+{
+	"info": {
+		"_postman_id": "fc03e1cd-1275-4c82-b0ad-71b2aecc7e71",
+		"name": "auto-ncore",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3358271"
+	},
+	"item": [
+		{
+			"name": "torrents",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/torrents",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"torrents"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "torrents/{id}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/torrents/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"torrents",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "torrents/download",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"id\": \"3949760\",\r\n        \"title\": \"Star.Wars.Andor.S02.1080p.DSNP.WEB-DL.DDP5.1.Atmos.H.264.HUN.ENG-PTHD\",\r\n        \"key\": \"c04509fa63b41d89d101a52412912120\",\r\n        \"size\": {\r\n            \"_unit\": \"GiB\",\r\n            \"_size\": 22902913105.92\r\n        },\r\n        \"type\": \"hdser_hun\",\r\n        \"date\": \"2025-05-14T10:55:55\",\r\n        \"seed\": \"1122\",\r\n        \"leech\": \"842\",\r\n        \"download\": \"https://ncore.pro/torrents.php?action=download&id=3949760&key=c04509fa63b41d89d101a52412912120\",\r\n        \"url\": \"https://ncore.pro/torrents.php?action=details&id=3949760\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/torrents/download",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"torrents",
+						"download"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "torrents/test_tmdb",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/torrents/test/Andor",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"torrents",
+						"test",
+						"Andor"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "torrents/show_details",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/torrents/show_details/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"torrents",
+						"show_details",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tracker",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/tracker/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"tracker",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tracker/{ncore_id}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/tracker/3949760",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"tracker",
+						"3949760"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tracker/test",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/tracker/test/Andor",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"tracker",
+						"test",
+						"Andor"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
