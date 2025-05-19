@@ -85,44 +85,22 @@ class NCoreClient:
         return self.client.get_torrent(id)
     
     def parse_tvshow_title(self, title):
-        # seriesList = self.search_torrents(title, TorrentCategory.SHOW)
-        # flatList = [series["title"] for series in seriesList]
-        seriesList = [
-            "Pandora.2019.S02.WEB.h264-BAE",
-            "Bevándorlók Ausztráliában S01",
-            "Pandora.2019.S01.MiXED.x264-MiXGROUP",
-            "Andor.S02.DSNP.WEBRiP.AAC2.0.x264.HuN.EnG-B9R",
-            "Bandidos.S01.2024.NF.WEBRiP.AAC2.0.x264.HuN.SpA-B9R",
-            "Alexander.The.Making.of.a.God.S01.480p.NF.WEB-DL.DD+5.1.Atmos.H.264.Hun-ARROW",
-            "Star.Wars.Andor.S01.HS.WEBRip.x264.HUN.ENG-FULCRUM",
-            "Rocklexikon - Benkó Sándor",
-            "Beforeigners.S02.HMAX.WEBRip.x264.HUN.NOR-FULCRUM",
-            "Sandor.Matyas.1979.S01.Read.Nfo.ReTaiL.DVDRip.x264.Hun-eStone",
-            "Vándorlás a természetben S01",
-            "Vándorlás a természetben S01",
-            "Beforeigners.S01.WEB-DLRip.x264.HUN-Teko",
-            "Andor.S01E00.A.Disney.Day.Special.Look.1080p.WEB.h264-KOGi",
-            "Pandora.2019.S02.720p.WEB.H264-MiXGROUP",
-            "Bevándorlók Ausztráliában S01 1080p",
-            "Bevándorlók Ausztráliában S01 720p",
-            "Pandora.2019.S01.720p.AMZN.WEB-DL.DDP5.1.H.264-KiNGS",
-            "Időbevándorlók S01 720p",
-            "Időbevándorlók S01 1080p",
-            "Pandora of the Crimson Shell S01 720p",
-            "Pandora Hearts S01 720p",
-            "Star.Wars.Andor.S02.2160p.APPS.WEB-DL.DDP.Atmos.5.1.H.265.HuN-GOODWILL",
-            "Star.Wars.Andor.S02E01.2160p.APPS.WEB-DL.DDP.Atmos.5.1.H.265.HuN-GOODWILL",
-            "Andor.S02.1080p.DSNP.WEB-DL.DDP5.1.Atmos.DV.HDR.H265.HuN.EnG-B9R",
-            "Star.Wars.Andor.S02.2160p.DSNP.WEB-DL.P5.Dolby.Vision.DDP5.1.Atmos.h265.HUN-UFO971",
-            "Star.Wars.Andor.S02.2160p.DSNP.WEB-DL.DDP5.1.Atmos.DV.HDR.H.265.HUN.ENG-PTHD",
-            "Star.Wars.Andor.S02.1080p.DSNP.WEB-DL.DDP5.1.Atmos.H.264.HUN.ENG-PTHD",
-            "Star.Wars.Andor.S02.720p.DSNP.WEB-DL.DDP5.1.Atmos.H.264.HUN.ENG-PTHD",
-            "Star.Wars.Andor.S01.2160p.DSNP.WEB-DL.P5.Dolby.Vision.DDP-Atmos.5.1.h265.HUN-UFO971",
-            "Bandidos.S02.1080p.NF.WEB-DL.DV.HDR.DDP5.1.Atmos.H.265.HUN-FULCRUM",
-            "Bandidos.S02.1080p.NF.WEB-DL.DDP5.1.Atmos.H.264.HUN-FULCRUM"
-        ]
         # Normalize
-        # name = re.sub(r"[._-]+", " ", title).strip()
-        testResult = list(map(lambda name: re.sub(r"[._-]+", " ", name).strip(), seriesList))
+        title = re.sub(r"[._-]+", " ", title).strip()
 
-        return testResult
+        # cut off season or episode markers
+        match = re.search(r"(.*?)\b(S\d{1,2}|E\d{1,2}|\d{4})\b", title, re.IGNORECASE)
+        if match:
+            title = match.group
+
+        # Remove trailing resolution, codec, etc...
+        noise_keywords = [
+            "WEB", "WEBRip", "WEB-DL", "HDRip", "BDRip", "DVDRip", "HDTV",
+            "x264", "x265", "H\.264", "H\.265", "DDP", "DD", "AAC", "Atmos",
+            "Hun", "Eng", "EnG", "Fulcrum", "ARROW", "NF", "AMZN", "DSNP",
+            "REPACK", "DRTE", "SKST", "KOGi", "B9R", "MiXGROUP"
+        ]
+        pattern = r"\b(" + "|".join(noise_keywords) + r")\b"
+        title = re.sub(pattern, title, flags=re.IGNORECASE)
+        
+        return re.sub(r"\s+", " ", title).strip()
