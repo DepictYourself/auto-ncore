@@ -1,5 +1,6 @@
-from infrastructure.config_service import ConfigService
 import requests
+from infrastructure.config_service import ConfigService
+from models.tmdb import TmdbTVSearchResponse, TmdbTVShowDetails
 
 
 class TmdbClient:
@@ -14,7 +15,13 @@ class TmdbClient:
         }
     
 
-    def search_show(self, query_string, include_adult=False, language="en-US", result_page=1):
+    def search_show(
+            self,
+            query_string,
+            include_adult=False,
+            language="en-US",
+            result_page=1
+    ) -> TmdbTVSearchResponse:
         url = self.config["url"]
         headers = self._get_headers()
         response = requests.get(
@@ -30,7 +37,7 @@ class TmdbClient:
         return response.json()
     
 
-    def get_show_details(self, id, language="en-US"):
+    def get_show_details(self, id, language="en-US") -> TmdbTVShowDetails:
         url = self.config["url"]
         response = requests.get(
             url+f"/tv/{id}",
