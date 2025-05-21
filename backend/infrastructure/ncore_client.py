@@ -85,13 +85,15 @@ class NCoreClient:
         return self.client.get_torrent(id)
     
     def parse_tvshow_title(self, title):
+        name = title
+        
         # Normalize
-        title = re.sub(r"[._-]+", " ", title).strip()
+        name = re.sub(r"[._-]+", " ", name).strip()
 
         # cut off season or episode markers
-        match = re.search(r"(.*?)\b(S\d{1,2}|E\d{1,2}|\d{4})\b", title, re.IGNORECASE)
+        match = re.search(r"(.*?)\b(S\d{1,2}|E\d{1,2}|\d{4})\b", name, re.IGNORECASE)
         if match:
-            title = match.group
+            name = match.group(1)
 
         # Remove trailing resolution, codec, etc...
         noise_keywords = [
@@ -101,6 +103,6 @@ class NCoreClient:
             "REPACK", "DRTE", "SKST", "KOGi", "B9R", "MiXGROUP"
         ]
         pattern = r"\b(" + "|".join(noise_keywords) + r")\b"
-        title = re.sub(pattern, title, flags=re.IGNORECASE)
+        name = re.sub(pattern, "", name, flags=re.IGNORECASE)
         
-        return re.sub(r"\s+", " ", title).strip()
+        return re.sub(r"\s+", " ", name).strip()
