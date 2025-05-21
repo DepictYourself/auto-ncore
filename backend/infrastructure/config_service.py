@@ -66,7 +66,6 @@ class ConfigService:
             "password": self.ncore_password,
             "key": self.ncore_key
         }
-        print("ncore config: ", config)
         return config
     
     def get_tmdb_config(self) -> TmdbConfig:

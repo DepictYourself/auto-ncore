@@ -84,25 +84,54 @@ class NCoreClient:
     def get_torrent_info(self, id):
         return self.client.get_torrent(id)
     
+
+    def normalize_tvshow_title(self, title: str) -> str:
+        return re.sub(r"[._-]+", " ", title).strip()
+    
+
+    def extract_season_episode(self, title: str) -> tuple[str, int |None, int | None]:
+        season = episode = None
+
+        # S01E02, S1E2, S01, E01, etc.
+        match = re.search(r"S(\d{1,2})(?:E(\d{1,2}))?", title, re.IGNORECASE)
+        if match:
+            season = int(match.group(1))
+            if match.group(2):
+                episode = int(match.group(2))
+        return title, season, episode
+    
+
+     # Remove trailing resolution, codec, etc...
+    def remove_technical_info(self, title: str) -> str:
+        noise_keywords = [
+            "WEB-DL", "WEB-DLRip", "WEB", "WEBRip", "HDRip", "BDRip",
+            "x264", "x265", "H.264", "H.265", "DDP","DD\\+2.0", "AAC",
+            "Hun-SLN","Hun-eStone", "Hun-BNR","HUN-Teko", "Hun-GOODWILL",
+            "Hun", "Eng", "EnG", "NF", "AMZN", "DSNP",  "DRTE", "SKST", "KOGi",
+            "SpA-B9R", "B9R", "576p", "720p", "1080p", "1080i", "480p", "480i",
+            "Xvid-HSF", "Xvid" "h264-ETHEL", "h264-BAE", "h264", "ETHEL",
+            "DDP5.1", "DD5.1", "DD\\+5.1", "AAC2.0", "DAVI", "HDTV",
+            "MiXED", "REPACK", "DV", "HDR", "\\.HS", "HMAX", "ARROW",
+            "ReTaiL", "NOR-FULCRUM", "Fulcrum", "Read\\.Nfo", "DVDRip", 
+            'MiXGROUP', "APPS", "Atmos\\.5\\.1", "Atmos", "2160p", "H265"
+
+        ]
+        pattern = r"\b(" + "|".join(noise_keywords) + r")\b"
+
+        result = re.sub(pattern, "", title, flags=re.IGNORECASE)
+        return result
+
+
     def parse_tvshow_title(self, title):
         name = title
         
+        # Remove resolution, codec, encoding, source info
+        name = self.remove_technical_info(name)
         # Normalize
-        name = re.sub(r"[._-]+", " ", name).strip()
+        name = self.normalize_tvshow_title(name)
 
-        # cut off season or episode markers
-        match = re.search(r"(.*?)\b(S\d{1,2}|E\d{1,2}|\d{4})\b", name, re.IGNORECASE)
-        if match:
-            name = match.group(1)
+        # Cut off before the season/episode marker
+        season_episode_pattern = r"\b(S\d{1,2}(E\d{1,2})?|E\d{1,2}|\d{4})\b"
+        name = re.sub(season_episode_pattern, "", name, flags=re.IGNORECASE)
 
-        # Remove trailing resolution, codec, etc...
-        noise_keywords = [
-            "WEB", "WEBRip", "WEB-DL", "HDRip", "BDRip", "DVDRip", "HDTV",
-            "x264", "x265", "H\.264", "H\.265", "DDP", "DD", "AAC", "Atmos",
-            "Hun", "Eng", "EnG", "Fulcrum", "ARROW", "NF", "AMZN", "DSNP",
-            "REPACK", "DRTE", "SKST", "KOGi", "B9R", "MiXGROUP"
-        ]
-        pattern = r"\b(" + "|".join(noise_keywords) + r")\b"
-        name = re.sub(pattern, "", name, flags=re.IGNORECASE)
-        
         return re.sub(r"\s+", " ", name).strip()
