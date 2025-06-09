@@ -18,14 +18,14 @@ services:
     depends_on:
       - transmission
 
-  # frontend:
-  #   build:
-  #     context: ./frontend
-  #   ports:
-  #     - "8080:80"
-  #   volumes:
-  #     - ./frontend:/usr/share/nginx/html
-  #   command: ["npm", "run", "build"]
+  frontend:
+    build:
+      context: ./frontend
+    container_name: auto-ncore-frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
 
   # nginx:
   #   build:
