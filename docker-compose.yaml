@@ -23,7 +23,12 @@ services:
       context: ./frontend
     container_name: auto-ncore-frontend
     ports:
-      - "8080:80"
+      - "5173:5173"
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules # prevents overwriting
     depends_on:
       - backend
 

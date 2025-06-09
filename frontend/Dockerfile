@@ -1,15 +1,12 @@
-FROM node:22-alpine AS builder
+FROM node:22-alpine
 
 WORKDIR /app
-COPY package.json ./
-RUN npm install
-COPY . .
-RUN npm run build
 
-FROM nginx:alpine
-COPY default.conf /etc/nginx/conf.d/default.conf
-WORKDIR /usr/share/nginx/html
-RUN rm -rf ./*
-COPY --from=builder /app/dist .
-EXPOSE 80
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+COPY package.json package-lock.json* ./
+RUN npm install
+
+COPY . .
+
+EXPOSE 5173
+
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

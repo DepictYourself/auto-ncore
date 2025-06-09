@@ -14,8 +14,8 @@ RUN apt-get update && apt-get install -y \
 # set the working directory
 WORKDIR /app
 
-COPY ./requirements.txt /app
-RUN pip install --no-cache-dir --upgrade -r requirements.txt \
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt \
     && pip install --no-cache-dir debugpy
 
 
@@ -23,7 +23,7 @@ RUN pip install --no-cache-dir --upgrade -r requirements.txt \
 RUN apt-get remove -y gcc g++ make libffi-dev musl-dev && apt-get autoremove -y
 
 
-COPY . /app
+COPY . .
 
 # Expose port 5678 for the debugger
 EXPOSE 5678 5678
