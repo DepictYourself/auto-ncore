@@ -1,6 +1,6 @@
 import requests
 from infrastructure.config_service import ConfigService
-from models.tmdb import TmdbTVSearchResponse, TmdbTVShowDetails
+from models.tmdb import tmdb_discover_movie_response, TmdbTVSearchResponse, TmdbTVShowDetails, SortBy
 
 
 class TmdbClient:
@@ -13,6 +13,33 @@ class TmdbClient:
             "Authorization": f"Bearer {self.config['jwt']}",
             "Content-Type": "application/json;charset=utf-8"
         }
+
+    
+    def discover_movies(
+            self,
+            adult: bool = False,
+            include_video: bool = False,
+            language: str = "en-US",
+            page: int = 1,
+            sort_by: SortBy = SortBy.popularity_desc
+        ) -> tmdb_discover_movie_response:
+        # The discover request can be extended with more params
+        base_url = self.config["url"]
+        headers = self._get_headers()
+        response = requests.get(
+            base_url + "/discover/movie",
+            params={
+                "include_adulst": adult,
+                "include_video": include_video,
+                "language": language,
+                "page": page,
+                "sort_by": sort_by
+            },
+            headers=headers
+        )
+        if(response.status_code != 200):
+            raise Exception(f"Failed to fetch tmdb api /discover/movie endpoint: {response.text}")
+        return response.json()
     
 
     def search_show(

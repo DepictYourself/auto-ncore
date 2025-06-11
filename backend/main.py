@@ -1,13 +1,14 @@
 #! python3.11
 from fastapi import FastAPI, Response
-from api import torrents, tracker
+from api import movie, torrent, tracker
 
 
 app = FastAPI()
 
 # Include routers
-app.include_router(torrents.router, prefix='/torrents', tags=["Torrents"])
+app.include_router(torrent.router, prefix='/torrents', tags=["Torrent"])
 app.include_router(tracker.router, prefix='/tracker', tags=["Tracker"])
+app.include_router(movie.router, prefix='/movie', tags=["Movie"])
 
 
 @app.get('/')

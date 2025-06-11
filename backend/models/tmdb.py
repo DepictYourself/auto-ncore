@@ -1,3 +1,4 @@
+from enum import Enum
 from pydantic import BaseModel
 from typing import List,Optional
 
@@ -111,3 +112,44 @@ class TmdbTVSearchResponse(BaseModel):
     results: List[TmdbTVShow]
     total_pages: int = 0
     total_results: int = 0
+
+
+class TmdbMovie(BaseModel):
+    adult: bool
+    backdrop_path: str
+    genre_ids: List[int]
+    id: int
+    original_language: str
+    original_title: str
+    overview: str
+    popularity: float
+    poster_path: str
+    release_date: str
+    title: str
+    video: bool
+    vote_average: float
+    vote_count: int
+
+
+class tmdb_discover_movie_response(BaseModel):
+    page: int
+    results: List[TmdbMovie]
+    total_pages: int
+    total_results: int
+
+
+class SortBy(Enum):
+    original_title_asc = "original_title.asc"
+    original_title_desc = "original_title.desc"
+    popularity_asc= "popularity.asc"
+    popularity_desc = "popularity.desc"
+    revenue_asc = "revenue.asc"
+    revenue_desc = "revenue.desc"
+    primary_release_date_asc = "primary_release_date.asc"
+    primary_release_date_desc = "primary_release_date.desc"
+    title_asc = "title.asc"
+    title_desc = "title.desc"
+    vote_avarage_asc = "vote_avarage.asc"
+    vote_avarage_desc = "vote_avarage.desc"
+    vote_count_asc = "vote_count.asc"
+    vote_count_desc = "vote_count.desc"

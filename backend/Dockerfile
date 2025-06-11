@@ -1,4 +1,4 @@
-FROM --platform=linux/arm/v7 arm32v7/python:3.11-slim-bullseye
+FROM python:3.11-slim-bullseye
 
 
 # Install system dependencies required for building Python packages

@@ -81,3 +81,13 @@ class TrackerService:
     
     def shows(self, title: str):
         return self.client.parse_tvshow_title(title)
+    
+
+class MovieService:
+    def __init__(self):
+        self.config_service = ConfigService()
+        self.client = TmdbClient(self.config_service)
+
+    def discover_movies(self):
+        results = self.client.discover_movies(adult=False, include_video=False, page=1)["results"]
+        return results

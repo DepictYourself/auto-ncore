@@ -7,6 +7,7 @@ from ncoreparser import Client, SearchParamType, Torrent
 class NCoreClient:
     def __init__(self, config_service: ConfigService):
         config = config_service.get_ncore_config()
+        self.config = config
         self.client = Client()
         self.client.login(
             username=config['username'],
@@ -77,7 +78,23 @@ class NCoreClient:
         return list(unique_results)
     
 
-    def list_torrents(self):
+    def list_torrents(self, category: TorrentCategory = TorrentCategory.MOVIE) -> list[Torrent]:
+        # ncore_types = self.map_category(category)
+        # ncore_results: list[Torrent] = []
+        # for type in ncore_types:
+        #     results = self.client.get_recommended(type)
+        #     ncore_results.extend(results)
+        # return ncore_results
+        
+        rss_url = "http://ncore.pro/rss.php?key=" + self.config["key"]
+        #rss_url = "http://finderss.it.cx/?&cat=Film%20(HUN%20HD),&key=" + self.config["key"]
+        torrents = list(self.client.get_by_rss(rss_url))
+        for torrent in torrents:
+            print(torrent['title'], torrent['type'], torrent['size'], torrent['id'])
+        return torrents
+    
+
+    def get_seeds(self):
         return self.client.get_by_activity()
     
 
