@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
       {
-        "name": "Python: Remote Attach",
+        "name": "Run and debug in docker",
         "type": "debugpy",
         "request": "attach",
         "connect": {

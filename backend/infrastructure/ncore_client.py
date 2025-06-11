@@ -124,13 +124,14 @@ class NCoreClient:
             "WEB-DL", "WEB-DLRip", "WEB", "WEBRip", "HDRip", "BDRip",
             "x264", "x265", "H.264", "H.265", "DDP","DD\\+2.0", "AAC",
             "Hun-SLN","Hun-eStone", "Hun-BNR","HUN-Teko", "Hun-GOODWILL",
-            "Hun", "Eng", "EnG", "NF", "AMZN", "DSNP",  "DRTE", "SKST", "KOGi",
+            "Hun", "ENG-PTHD", "Eng", "EnG", "NF", "AMZN", "DSNP",  "DRTE",
             "SpA-B9R", "B9R", "576p", "720p", "1080p", "1080i", "480p", "480i",
             "Xvid-HSF", "Xvid" "h264-ETHEL", "h264-BAE", "h264", "ETHEL",
             "DDP5.1", "DD5.1", "DD\\+5.1", "AAC2.0", "DAVI", "HDTV",
             "MiXED", "REPACK", "DV", "HDR", "\\.HS", "HMAX", "ARROW",
             "ReTaiL", "NOR-FULCRUM", "Fulcrum", "Read\\.Nfo", "DVDRip", 
-            'MiXGROUP', "APPS", "Atmos\\.5\\.1", "Atmos", "2160p", "H265"
+            'MiXGROUP', "APPS", "Atmos\\.5\\.1", "Atmos", "2160p", "H265",
+            "KOGi", "SKST",
 
         ]
         pattern = r"\b(" + "|".join(noise_keywords) + r")\b"

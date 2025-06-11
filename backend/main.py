@@ -1,9 +1,23 @@
 #! python3.11
 from fastapi import FastAPI, Response
+from fastapi.middleware.cors import CORSMiddleware
 from api import movie, torrent, tracker
 
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:5173"
+    # TODO: Add prod url later
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 # Include routers
 app.include_router(torrent.router, prefix='/torrents', tags=["Torrent"])

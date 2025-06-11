@@ -1,4 +1,3 @@
-
 from api.request import TorrentDTO
 from domain.torrent_category import TorrentCategory
 from infrastructure.config_service import ConfigService
@@ -23,23 +22,27 @@ class TorrentClientService:
         return self.client.get_torrent(id)
     
     def add_torrent(self, torrent: TorrentDTO):
-        print("services.py add_torrent() called.")
         category = self.kodi_dir_mapper.map_category(type=torrent.type)
-        print("category: ", category)
-        
+        print("add_torrent()", torrent_title_info)
         download_dir = self.config_service.get_tranmission_config()['dir']
         subdir = "/"
         if(category == TorrentCategory.SHOW):
-            tmdb_result = self.tmdb_client.search_show(torrent.title)
-            print("tmdb_result: ", tmdb_result)
-            show_name = ""
-            release_year = ""
-            season_number = 0
-            subdir += self.kodi_dir_mapper.get_tvshow_directory(
-                show_name,
-                release_year,
-                season_number
-            )
+            show_title = self.ncore_client.parse_tvshow_title(torrent.title)
+            torrent_title_info = self.ncore_client.extract_season_episode(torrent.title)
+            
+            tmdb_result = self.tmdb_client.search_show(show_title)
+            tmdb_result.results.__len__
+            if tmdb_result.total_results == 1:
+                tmdb_id = tmdb_result.results[0].id
+                show_details = self.tmdb_client.get_show_details(tmdb_id)
+                show_name = show_details.name
+                release_year = show_details.first_air_date[0:5]
+                season_number = torrent_title_info[1]
+                # subdir += self.kodi_dir_mapper.get_tvshow_directory(
+                #     show_name,
+                #     release_year,
+                #     season_number
+                # )
         elif(category == TorrentCategory.MOVIE):
             subdir += "movies/"
 
