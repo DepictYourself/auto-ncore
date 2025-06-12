@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Card } from "flowbite-react";
 
 type Media = {
     id: string;
@@ -51,19 +50,27 @@ const Strip: React.FC<StripProps> = ({ title, fetchFn }) => {
         <div className="py-4 px-2">
             {title && <h2 className="text-xl font-semibold mb-2">{title}</h2>}
             <div className="overflow-x-auto whitespace-nowrap">
-                <div className="flex gap-4">
+                <div className="flex gap-4 py-6">
                     {list.map((item) => (
-                        <Card
+                        <div
                             key={item.id}
-                            className="min-w-[150px] w-36 flex-shrink-0"
+                            className="flex bg-white dark:border-gray-800 shadow-lg flex-col 
+                            w-1/5 flex-shrink-0 rounded-lg overflow-hidden"
                         >
-                            <img
-                                src={`https://image.tmdb.org/t/p/w300/${item.poster_path}`} 
+                            <img 
+                                src={`https://image.tmdb.org/t/p/w300${item.poster_path}`}
                                 alt={`${item.title} poster`}
-                                className="w-full h-48 object-cover rounded-t-lg" 
+                                className="object-cover"
                             />
-                            <div className="p-2 text-sm text-center">{item.title}</div>
-                        </Card>
+                            <div className="p-4">
+                                <h5 className="text-xl font-bold tracking-tight text-gray-900 ">
+                                    {item.title}
+                                </h5>
+                                <p className="font-normal text-gray-700 dark:text-gray-400 line-clamp-3">
+                                    {item.overview}
+                                </p>
+                            </div>
+                        </div>
                     ))}
                 </div>
             </div>
