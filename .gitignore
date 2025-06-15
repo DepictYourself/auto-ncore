@@ -175,3 +175,4 @@ cython_debug/
 # Transmission files and folders
 /transmission
 !tansmission/settings.json
+transmission/settings.json
