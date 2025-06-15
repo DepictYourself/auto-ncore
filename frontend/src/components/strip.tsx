@@ -27,6 +27,8 @@ const Strip: React.FC<StripProps> = ({ title, fetchFn }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -61,7 +63,7 @@ const Strip: React.FC<StripProps> = ({ title, fetchFn }) => {
                         >
                             <Link to={`/movie/${item.id}`} state={{movie: item}}>
                                 <img 
-                                    src={`https://image.tmdb.org/t/p/w300${item.poster_path}`}
+                                    src={`${import.meta.env.VITE_TMDB_IMG_URL}/w300${item.poster_path}`}
                                     alt={`${item.title} poster`}
                                     className="object-cover"
                                 />

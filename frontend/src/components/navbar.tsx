@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Avatar,
   Dropdown,
@@ -18,6 +19,7 @@ const navbar = () => {
         <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Auto-nCore</span>
       </NavbarBrand>
       <div className="flex md:order-2">
+        {/* 
         <Dropdown
           arrowIcon={false}
           inline
@@ -34,11 +36,12 @@ const navbar = () => {
           <DropdownItem>Earnings</DropdownItem>
           <DropdownDivider />
           <DropdownItem>Sign out</DropdownItem>
-        </Dropdown>
+        </Dropdown> 
+        */}
         <NavbarToggle />
       </div>
       <NavbarCollapse>
-        <NavbarLink href="#" active>
+        <NavbarLink href="/" active>
           Böngésző
         </NavbarLink>
         <NavbarLink href="#">Letöltések</NavbarLink>
