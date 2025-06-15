@@ -7,8 +7,7 @@
         "command": "docker-compose",
         "args": [
           "up",
-          "--build",
-          "--remove-orphans"
+          "--build"
         ],
         "isBackground": true,
         "problemMatcher": {
@@ -40,8 +39,7 @@
             "command": "docker-compose",
             "args": [
                 "up",
-                "--build",
-                "--remove-orphans"
+                "--build"
             ],
             "isBackground": false
         }

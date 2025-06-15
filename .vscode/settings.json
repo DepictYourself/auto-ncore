@@ -14,5 +14,6 @@
     "tailwindCSS.experimental.classRegex": [
         ["twMerge\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
         ["createTheme(?:<\\w+>)?\\s*\\(([^)]*)\\)", "{?\\s?[\\w].*:\\s*?[\"'`]([^\"'`]*).*?,?\\s?}?"]
-    ]
+    ],
+    "editor.tabSize": 2
 }

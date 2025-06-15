@@ -3,6 +3,7 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import tmdbGenres from "../data/tmdbgenre.json";
 import { Badge } from "flowbite-react";
 import Navbar from "./navbar";
+import TorrentList from "./torrent-list";
 
 const MovieDetail = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -49,6 +50,8 @@ const MovieDetail = () => {
           <p className="mt-2 text-md">TMDB Rating: {movie.vote_average.toFixed(1)} ⭐</p>
         </div>
       </div>
+
+      <TorrentList torrentSearchKeyword={movie.original_title} />
     </>
   );
 };
