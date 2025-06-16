@@ -109,8 +109,8 @@ const TorrentList: React.FC<TorrentListProps> = ({torrentSearchKeyword}) => {
                 <TableCell>{torrent.leech}</TableCell>
                 {/* TODO */}
                 <TableCell>
-                  <Link to={`/downloads/add=${encodeURIComponent(torrent.download)}`}>
-                    <Button color="light">Download</Button>
+                  <Link to={`/downloads?url=${encodeURIComponent(torrent.download)}`}>
+                    <Button className="cursor-pointer" color="light">Download</Button>
                   </Link>
                 </TableCell>
               </TableRow>

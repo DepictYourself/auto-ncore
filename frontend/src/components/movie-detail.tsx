@@ -12,6 +12,8 @@ const MovieDetail = () => {
   const movie = location.state?.movie;
   if (!movie) {
     return <p>Loading or fetching fallback data.</p>;
+    // TODO
+    // Implement fetching fallback data using id.
   }
 
   const getMovieGenreList = (genreIdArr: number[]) => {
