@@ -1,6 +1,7 @@
-import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from 'flowbite-react';
+import { Button, Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from 'flowbite-react';
 import React from 'react';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export interface NcoreTorrent {
   id: string;
@@ -106,6 +107,12 @@ const TorrentList: React.FC<TorrentListProps> = ({torrentSearchKeyword}) => {
                 <TableCell>{torrent.date.split('T')[0]}</TableCell>
                 <TableCell>{torrent.seed}</TableCell>
                 <TableCell>{torrent.leech}</TableCell>
+                {/* TODO */}
+                <TableCell>
+                  <Link to={`/downloads/add=${encodeURIComponent(torrent.download)}`}>
+                    <Button color="light">Download</Button>
+                  </Link>
+                </TableCell>
               </TableRow>
             ))
           }

@@ -30,7 +30,7 @@ const MovieDetail = () => {
       <Navbar />
 
       <div
-        className="relative w-full h-[500px] bg-cover bg-center"
+        className="relative w-full h-[500px] mb-16 bg-cover bg-center"
         style={{
           backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(255,255,255,1)), url(${import.meta.env.VITE_TMDB_IMG_URL}/w1280${movie.backdrop_path})`
         }}
