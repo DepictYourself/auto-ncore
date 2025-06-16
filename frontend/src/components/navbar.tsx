@@ -11,6 +11,7 @@ import {
   NavbarLink,
   NavbarToggle,
 } from "flowbite-react";
+import { Link } from "react-router-dom";
 
 const navbar = () => {
   return (
@@ -41,10 +42,10 @@ const navbar = () => {
         <NavbarToggle />
       </div>
       <NavbarCollapse>
-        <NavbarLink href="/" active>
-          Böngésző
+        <NavbarLink as={Link} to="/" active>
+          Movies
         </NavbarLink>
-        <NavbarLink href="#">Letöltések</NavbarLink>
+        <NavbarLink as={Link} to="/downloads">Downloads</NavbarLink>
       </NavbarCollapse>
     </Navbar>
   )
