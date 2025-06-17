@@ -16,8 +16,8 @@ class TransmissionClient:
     def get_torrents(self) -> List[Torrent]:
         return self.client.get_torrents()
     
-    def get_torrent(self, id) -> Torrent:
-        return self.client.get_torrent(id)
+    def get_torrent(self, hash) -> Torrent:
+        return self.client.get_torrent(torrent_id=hash)
     
     def add_torrent(self, url, dir) -> Torrent:
         return self.client.add_torrent(torrent=url, download_dir=dir)

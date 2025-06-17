@@ -18,8 +18,8 @@ class TorrentClientService:
     def list_torrents(self):
         return self.client.get_torrents()
     
-    def torrent_info(self, id: int | str):
-        return self.client.get_torrent(id)
+    def get_torrent(self, hash: str):
+        return self.client.get_torrent(hash)
     
     def add_torrent(self, torrent: TorrentDTO):
         category = self.kodi_dir_mapper.map_category(type=torrent.type)
