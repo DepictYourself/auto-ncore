@@ -1,28 +1,35 @@
+import logging
 import re
 from domain.torrent_category import TorrentCategory
 from infrastructure.config_service import ConfigService
 
 from ncoreparser import Client, SearchParamType, Torrent
 
+
 class NCoreClient:
     def __init__(self, config_service: ConfigService):
         config = config_service.get_ncore_config()
         self.config = config
         self.client = Client()
-        self.client.login(
-            username=config['username'],
-            password=config["password"]
-        )
+        self.logged_in = False
+        self.logger = logging.getLogger("uvicorn.error")
 
+    def login(self):
+        if not self.logged_in:
+            try:
+                self.client.login(
+                    username=self.config["username"], password=self.config["password"]
+                )
+                self.logged_in = True
+            except Exception as e:
+                self.logger.warning(f"Could not log in to tracker: {e}")
 
     def __enter__(self):
         return self
 
-
     def __exit__(self, exc_type, exc_value, traceback):
         if self.client:
             self.client.logout()
-
 
     def map_category(self, category: TorrentCategory) -> list[SearchParamType]:
         category_mappings = {
@@ -30,83 +37,80 @@ class NCoreClient:
                 SearchParamType.SD,
                 SearchParamType.SD_HUN,
                 SearchParamType.HD,
-                SearchParamType.HD_HUN
+                SearchParamType.HD_HUN,
             ],
             TorrentCategory.SHOW: [
                 SearchParamType.SDSER,
                 SearchParamType.SDSER_HUN,
                 SearchParamType.HDSER,
-                SearchParamType.HDSER_HUN
+                SearchParamType.HDSER_HUN,
             ],
             TorrentCategory.MUSIC: [
                 SearchParamType.MP3,
                 SearchParamType.MP3_HUN,
                 SearchParamType.LOSSLESS,
                 SearchParamType.LOSSLESS_HUN,
-                SearchParamType.CLIP
+                SearchParamType.CLIP,
             ],
             TorrentCategory.GAME: [
                 SearchParamType.GAME_ISO,
                 SearchParamType.GAME_RIP,
-                SearchParamType.CONSOLE
+                SearchParamType.CONSOLE,
             ],
-            TorrentCategory.SOFTWARE : [
+            TorrentCategory.SOFTWARE: [
                 SearchParamType.ISO,
                 SearchParamType.MISC,
-                SearchParamType.MOBIL
+                SearchParamType.MOBIL,
             ],
-            TorrentCategory.EBOOK: [
-                SearchParamType.EBOOK,
-                SearchParamType.EBOOK_HUN
-            ]
+            TorrentCategory.EBOOK: [SearchParamType.EBOOK, SearchParamType.EBOOK_HUN],
         }
         return category_mappings.get(category, [])
 
-    
-    def search_torrents(self, pattern: str, category: TorrentCategory, limit: int = 10) -> list[Torrent]:
+    def search_torrents(
+        self, pattern: str, category: TorrentCategory, limit: int = 10
+    ) -> list[Torrent]:
+        self.login()
         ncore_categories = self.map_category(category)
 
         results = []
         for category in ncore_categories:
-            results.extend(self.client.search(
-                pattern=pattern,
-                type=category,
-                number=limit)
+            results.extend(
+                self.client.search(pattern=pattern, type=category, number=limit)
             )
 
-        unique_results = {result['id']: result for result in results}.values()
+        unique_results = {result["id"]: result for result in results}.values()
         return list(unique_results)
-    
 
-    def list_torrents(self, category: TorrentCategory = TorrentCategory.MOVIE) -> list[Torrent]:
+    def list_torrents(
+        self, category: TorrentCategory = TorrentCategory.MOVIE
+    ) -> list[Torrent]:
+        self.login()
         # ncore_types = self.map_category(category)
         # ncore_results: list[Torrent] = []
         # for type in ncore_types:
         #     results = self.client.get_recommended(type)
         #     ncore_results.extend(results)
         # return ncore_results
-        
+
         rss_url = "http://ncore.pro/rss.php?key=" + self.config["key"]
-        #rss_url = "http://finderss.it.cx/?&cat=Film%20(HUN%20HD),&key=" + self.config["key"]
+        # rss_url = "http://finderss.it.cx/?&cat=Film%20(HUN%20HD),&key=" + self.config["key"]
         torrents = list(self.client.get_by_rss(rss_url))
         for torrent in torrents:
-            print(torrent['title'], torrent['type'], torrent['size'], torrent['id'])
+            print(torrent["title"], torrent["type"], torrent["size"], torrent["id"])
         return torrents
-    
 
     def get_seeds(self):
+        self.login()
         return self.client.get_by_activity()
-    
 
     def get_torrent_info(self, id):
+        self.login()
         return self.client.get_torrent(id)
-    
 
     def normalize_tvshow_title(self, title: str) -> str:
         return re.sub(r"[._-]+", " ", title).strip()
-    
 
-    def extract_season_episode(self, title: str) -> tuple[str, int |None, int | None]:
+    def extract_season_episode(self, title: str) -> tuple[str, int | None, int | None]:
         season = episode = None
 
         # S01E02, S1E2, S01, E01, etc.
@@ -116,33 +120,84 @@ class NCoreClient:
             if match.group(2):
                 episode = int(match.group(2))
         return title, season, episode
-    
 
-     # Remove trailing resolution, codec, etc...
+    # Remove trailing resolution, codec, etc...
     def remove_technical_info(self, title: str) -> str:
         noise_keywords = [
-            "WEB-DL", "WEB-DLRip", "WEB", "WEBRip", "HDRip", "BDRip",
-            "x264", "x265", "H.264", "H.265", "DDP","DD\\+2.0", "AAC",
-            "Hun-SLN","Hun-eStone", "Hun-BNR","HUN-Teko", "Hun-GOODWILL",
-            "Hun", "ENG-PTHD", "Eng", "EnG", "NF", "AMZN", "DSNP",  "DRTE",
-            "SpA-B9R", "B9R", "576p", "720p", "1080p", "1080i", "480p", "480i",
-            "Xvid-HSF", "Xvid" "h264-ETHEL", "h264-BAE", "h264", "ETHEL",
-            "DDP5.1", "DD5.1", "DD\\+5.1", "AAC2.0", "DAVI", "HDTV",
-            "MiXED", "REPACK", "DV", "HDR", "\\.HS", "HMAX", "ARROW",
-            "ReTaiL", "NOR-FULCRUM", "Fulcrum", "Read\\.Nfo", "DVDRip", 
-            'MiXGROUP', "APPS", "Atmos\\.5\\.1", "Atmos", "2160p", "H265",
-            "KOGi", "SKST",
-
+            "WEB-DL",
+            "WEB-DLRip",
+            "WEB",
+            "WEBRip",
+            "HDRip",
+            "BDRip",
+            "x264",
+            "x265",
+            "H.264",
+            "H.265",
+            "DDP",
+            "DD\\+2.0",
+            "AAC",
+            "Hun-SLN",
+            "Hun-eStone",
+            "Hun-BNR",
+            "HUN-Teko",
+            "Hun-GOODWILL",
+            "Hun",
+            "ENG-PTHD",
+            "Eng",
+            "EnG",
+            "NF",
+            "AMZN",
+            "DSNP",
+            "DRTE",
+            "SpA-B9R",
+            "B9R",
+            "576p",
+            "720p",
+            "1080p",
+            "1080i",
+            "480p",
+            "480i",
+            "Xvid-HSF",
+            "Xvid" "h264-ETHEL",
+            "h264-BAE",
+            "h264",
+            "ETHEL",
+            "DDP5.1",
+            "DD5.1",
+            "DD\\+5.1",
+            "AAC2.0",
+            "DAVI",
+            "HDTV",
+            "MiXED",
+            "REPACK",
+            "DV",
+            "HDR",
+            "\\.HS",
+            "HMAX",
+            "ARROW",
+            "ReTaiL",
+            "NOR-FULCRUM",
+            "Fulcrum",
+            "Read\\.Nfo",
+            "DVDRip",
+            "MiXGROUP",
+            "APPS",
+            "Atmos\\.5\\.1",
+            "Atmos",
+            "2160p",
+            "H265",
+            "KOGi",
+            "SKST",
         ]
         pattern = r"\b(" + "|".join(noise_keywords) + r")\b"
 
         result = re.sub(pattern, "", title, flags=re.IGNORECASE)
         return result
 
-
     def parse_tvshow_title(self, title):
         name = title
-        
+
         # Remove resolution, codec, encoding, source info
         name = self.remove_technical_info(name)
         # Normalize

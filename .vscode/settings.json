@@ -15,5 +15,6 @@
         ["twMerge\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
         ["createTheme(?:<\\w+>)?\\s*\\(([^)]*)\\)", "{?\\s?[\\w].*:\\s*?[\"'`]([^\"'`]*).*?,?\\s?}?"]
     ],
-    "editor.tabSize": 2
+    "editor.tabSize": 2,
+    "editor.detectIndentation": false
 }
