@@ -17,3 +17,4 @@ class TorrentDTO(BaseModel):
     leech: int = Field(..., ge=0)
     download: HttpUrl
     url: HttpUrl
+

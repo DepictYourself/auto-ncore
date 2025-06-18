@@ -13,20 +13,20 @@ class TransmissionClient:
             password=config["password"]
         )
 
-    def get_torrents(self) -> List[Torrent]:
-        return self.client.get_torrents()
+    def get_torrents(self, fields) -> List[Torrent]:
+        return self.client.get_torrents(arguments=fields)
     
-    def get_torrent(self, hash) -> Torrent:
-        return self.client.get_torrent(torrent_id=hash)
+    def get_torrent(self, hash, fields) -> Torrent:
+        return self.client.get_torrent(torrent_id=hash, arguments=fields)
     
     def add_torrent(self, url, dir) -> Torrent:
         return self.client.add_torrent(torrent=url, download_dir=dir)
 
-    def remove_torrent(self, id) -> None:
-        return self.client.remove_torrent(id, delete_data=False)
+    def remove_torrents(self, ids, remove_files) -> None:
+        self.client.remove_torrent(ids=ids, delete_data=remove_files)
 
-    def stop_torrent(self, id) -> None:
-        return self.client.stop_torrent(id)
+    def stop_torrents(self, ids) -> None:
+        return self.client.stop_torrent(ids)
     
-    def start_torrent(self, id) -> None:
-        return self.client.start_torrent(id)
+    def start_torrent(self, ids) -> None:
+        return self.client.start_torrent(ids)

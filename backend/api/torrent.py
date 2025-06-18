@@ -2,7 +2,10 @@ from fastapi import APIRouter, Response, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from application.services import TorrentClientService
-from api.request import TorrentDTO
+from api.dtos.torrent_dto import TorrentDTO
+from api.dtos.stop_torrents_request import StopTorrentsRequest
+from api.dtos.start_torrents_request import StartTorrentsRequest
+from api.dtos.delete_torrents_request import DeleteTorrentsRequest
 
 
 
@@ -28,31 +31,24 @@ def get_torrent(hash_string: str) -> Response:
         "id": torrent.id, "name": torrent.name, "progress": torrent.progress,
         "status": torrent.status
     }
-    # except Exception as e:
-    #   return JSONResponse(
-    #     status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-    #     content=jsonable_encoder({
-    #       "error": str(e)
-    #     })
-    #   )
     
 
-@router.delete('/{hash_string}')
-def remove_torrent(hash_string: str) -> Response:
-    torrent_client_service.remove_torrent(hash_string)
-    return { "message": f"Torrent {hash_string} removed successfully."}
-
-
-@router.post('/{hash_string}/pause')
-def pause_torrent(hash_string: str) -> Response:
-    torrent_client_service.stop_torrent(hash_string)
-    return {"message": f"Torrent {hash_string} paused successfully."}
+@router.delete('/')
+def remove_torrent(request: DeleteTorrentsRequest) -> Response:
+    return torrent_client_service.remove_torrent(request.ids)
     
 
-@router.post('/{hash_string}/resume')
-def resume_torrent(hash_string: str) -> Response:
-    torrent_client_service.start_torrent(hash_string)
-    return {"message": f"Torrent {hash_string} resumed successfully."}
+
+@router.post('/stop')
+def stop_torrent(request: StopTorrentsRequest) -> Response:
+    return torrent_client_service.stop_torrents(request.ids)
+    
+    
+
+@router.post('/start')
+def resume_torrent(req: StartTorrentsRequest) -> Response:
+    return torrent_client_service.start_torrent(req.ids)
+    
 
 
 @router.get('/test/{query_string}')

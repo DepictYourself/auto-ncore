@@ -1,4 +1,5 @@
-from api.request import TorrentDTO
+from typing import List
+from api.dtos.torrent_dto import TorrentDTO
 from domain.torrent_category import TorrentCategory
 from infrastructure.config_service import ConfigService
 from infrastructure.ncore_client import NCoreClient
@@ -16,10 +17,38 @@ class TorrentClientService:
         self.kodi_dir_mapper = KodiDirectoryMapper(self.config_service)
 
     def list_torrents(self):
-        return self.client.get_torrents()
+        fields = [
+          "id",
+          "hashString",
+          "name",
+          "addedDate",
+          "percentDone",
+          "status",
+          "downloadDir",
+          "totalSize",
+          "downloadEver",
+          "uploadRation",
+          "peersConnected"
+          "magnetLink",
+        ]
+        return self.client.get_torrents(fields)
     
     def get_torrent(self, hash: str):
-        return self.client.get_torrent(hash)
+        fields = [
+          "id",
+          "hashString",
+          "name",
+          "addedDate",
+          "percentDone",
+          "status",
+          "downloadDir",
+          "totalSize",
+          "downloadEver",
+          "uploadRation",
+          "peersConnected"
+          "magnetLink",
+        ]
+        return self.client.get_torrent(hash, fields)
     
     def add_torrent(self, torrent: TorrentDTO):
         category = self.kodi_dir_mapper.map_category(type=torrent.type)
@@ -50,16 +79,27 @@ class TorrentClientService:
         url = torrent.download
 
         #return self.client.add_torrent(url, dir=download_dir)
+      
+
+    def remove_torrent(self, ids: List[int | str]):
+        torrents = []
+        for id in ids:
+            torrent = self.get_torrent(id)
+            torrents.append(torrent)
+        
+        remove_files = True
+        self.client.remove_torrents(ids, remove_files)
+        return {"message": f"Torrents removed successfully. {ids}"}
     
 
-    def remove_torrent(self, id: int | str):
-        return self.client.remove_torrent(id)
+    def stop_torrents(self, ids: List[int | str]):
+      self.client.stop_torrents(ids)
+      return f"Successfully stopped torrents {ids}"
+          
     
-    def stop_torrent(self, id: int | str):
-        return self.client.stop_torrent(id)
-    
-    def start_torrent(self, id: int | str):
-        return self.client.start_torrent(id)
+    def start_torrent(self, ids: List[int | str]):
+        self.client.start_torrent(ids)
+        return {"message": f"Torrents started successfully {ids}"}
     
     def test_tmdb(self, query):
         return self.tmdb_client.search_show(query)
