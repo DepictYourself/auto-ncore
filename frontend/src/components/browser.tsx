@@ -1,8 +1,9 @@
+import type TmdbMovieInterface from '../types/tmdb-movie.interface';
 import Strip from './strip';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
 
-const discoverTmdbMovies = async () => {
+const discoverTmdbMovies = async (): Promise<TmdbMovieInterface[]> => {
     const response = await fetch(BACKEND_URL + `/movie/discover`);
     if(!response.ok) throw new Error("Failed to fetch tmdb movies");
     return await response.json()

@@ -21,10 +21,11 @@ export interface NcoreTorrent {
 
 interface TorrentListProps {
   torrentSearchKeyword: string;
+  tmdbId: string;
 }
 
 
-const TorrentList: React.FC<TorrentListProps> = ({torrentSearchKeyword}) => {
+const TorrentList: React.FC<TorrentListProps> = ({torrentSearchKeyword, tmdbId}) => {
   const [torrentList, setTorrentList] = useState<NcoreTorrent[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -109,7 +110,8 @@ const TorrentList: React.FC<TorrentListProps> = ({torrentSearchKeyword}) => {
                 <TableCell>{torrent.leech}</TableCell>
                 {/* TODO */}
                 <TableCell>
-                  <Link to={`/downloads?url=${encodeURIComponent(torrent.download)}`}>
+                  <Link to={`/downloads?url=${encodeURIComponent(torrent.download)}
+                    &tmdbid=${tmdbId} `}>
                     <Button className="cursor-pointer" color="light">Download</Button>
                   </Link>
                 </TableCell>

@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Link, useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import tmdbGenres from "../data/tmdbgenre.json";
 import { Badge } from "flowbite-react";
 import Navbar from "./navbar";
 import TorrentList from "./torrent-list";
+import type TmdbMovieInterface from "../types/tmdb-movie.interface";
 
 const MovieDetail = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { id } = useParams();
   const location = useLocation();
-  const movie = location.state?.movie;
+  const movie: TmdbMovieInterface = location.state?.movie;
   if (!movie) {
     return <p>Loading or fetching fallback data.</p>;
     // TODO
@@ -53,7 +54,7 @@ const MovieDetail = () => {
         </div>
       </div>
 
-      <TorrentList torrentSearchKeyword={movie.original_title} />
+      <TorrentList torrentSearchKeyword={movie.original_title} tmdbId={movie.id} />
     </>
   );
 };

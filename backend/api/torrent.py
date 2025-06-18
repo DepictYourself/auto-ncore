@@ -2,7 +2,7 @@ from fastapi import APIRouter, Response, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from application.services import TorrentClientService
-from api.dtos.torrent_dto import TorrentDTO
+from api.dtos.add_torrent_request import AddTorrentRequest
 from api.dtos.stop_torrents_request import StopTorrentsRequest
 from api.dtos.start_torrents_request import StartTorrentsRequest
 from api.dtos.delete_torrents_request import DeleteTorrentsRequest
@@ -19,9 +19,9 @@ def get_torrents() -> Response:
 
 
 @router.post('/download')
-def add_torrent(dto: TorrentDTO) -> Response:
-    torrent = torrent_client_service.add_torrent(dto)
-    return { "message": "Torrent added successfully.", "torrent_id": torrent.id}
+def add_torrent(dto: AddTorrentRequest) -> Response:
+    return torrent_client_service.add_torrent(dto)
+    
 
 
 @router.get('/{hash_string}')

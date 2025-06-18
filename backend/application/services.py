@@ -1,11 +1,11 @@
 from typing import List
-from api.dtos.torrent_dto import TorrentDTO
 from domain.torrent_category import TorrentCategory
 from infrastructure.config_service import ConfigService
 from infrastructure.ncore_client import NCoreClient
 from infrastructure.transmission_client import TransmissionClient
 from infrastructure.kodi_directory_mapper import KodiDirectoryMapper
 from infrastructure.tmdb_client import TmdbClient
+from api.dtos.add_torrent_request import AddTorrentRequest
 
 
 class TorrentClientService:
@@ -50,7 +50,9 @@ class TorrentClientService:
         ]
         return self.client.get_torrent(hash, fields)
     
-    def add_torrent(self, torrent: TorrentDTO):
+    def add_torrent(self, request: AddTorrentRequest):
+        id = next(v for k, v in request.url.query_params if k == "id")
+        torrent = self.ncore_client.get_torrent_info(id)
         category = self.kodi_dir_mapper.map_category(type=torrent.type)
         print("add_torrent()", torrent_title_info)
         download_dir = self.config_service.get_tranmission_config()['dir']
@@ -76,9 +78,8 @@ class TorrentClientService:
             subdir += "movies/"
 
         download_dir += subdir
-        url = torrent.download
 
-        #return self.client.add_torrent(url, dir=download_dir)
+        return self.client.add_torrent(request.url, dir=download_dir)
       
 
     def remove_torrent(self, ids: List[int | str]):

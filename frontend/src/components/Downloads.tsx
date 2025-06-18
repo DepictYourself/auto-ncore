@@ -10,6 +10,12 @@ import {
   TableHead,
   TableHeadCell,
   TableRow,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Label,
+  TextInput
 } from "flowbite-react";
 import Navbar from "./navbar";
 import type { TransmissionTorrent } from "../types/TransmissionTorrent";
@@ -23,6 +29,8 @@ const Downloads = () => {
   const [selectedTorrents, setSelectedTorrents] = useState<Set<string>>(new Set());
   const [searchParams] = useSearchParams();
   const downloadUrl = searchParams.get("url");
+  const tmdbId = searchParams.get("tmdbid");
+  const [showModal, setShowModal] = useState(false);
 
   const getTorrentList = async (): Promise<{fields: TransmissionTorrent}[]> => {
     const url = new URL(`/torrents`, import.meta.env.VITE_BACKEND_URL);
@@ -44,6 +52,11 @@ const Downloads = () => {
     };
     fetchTorrents();
   }, []);
+
+
+  useEffect(() => {
+    setShowModal(true);
+  }, [downloadUrl, tmdbId])
 
 
   function selectTorrent(event: ChangeEvent<HTMLInputElement>){
@@ -141,8 +154,6 @@ const Downloads = () => {
     <>
       <Navbar />
 
-      {downloadUrl ?? <p>{downloadUrl}</p>}
-
       {isLoading ? (
         <div className="flex justify-center items-center py-8">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
@@ -213,6 +224,22 @@ const Downloads = () => {
               ))}
             </TableBody>
           </Table>
+
+          <Modal 
+            show={showModal}
+            popup
+            position="center"
+            onClose={() => setShowModal(false)}
+          >
+            <ModalHeader />
+            <ModalBody>
+              {/* Add torrent body...WIP - Work in Progress */}
+            </ModalBody>
+            <ModalFooter>
+              <Button>Add</Button>
+              <Button color="alternative" onClick={() => setShowModal(false)}>Cancel</Button>
+            </ModalFooter>
+          </Modal>
         </div>
       )}
       

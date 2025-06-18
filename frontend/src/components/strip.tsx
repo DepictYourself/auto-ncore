@@ -1,29 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
-type Media = {
-    id: string;
-    adult: boolean;
-    poster_path: string;
-    backdrop_path: string;
-    genre_ids: number[];
-    title: string;
-    original_title: string;
-    overview: string;
-    popularity: number;
-    release_date: string;
-    video: boolean;
-    vote_average: number;
-    vote_count: number;
-};
+import type TmdbMovieInterface from "../types/tmdb-movie.interface";
 
 type StripProps = {
     title?: string;
-    fetchFn: () => Promise<Media[] | undefined>;
+    fetchFn: () => Promise<TmdbMovieInterface[] | undefined>;
 };
 
 const Strip: React.FC<StripProps> = ({ title, fetchFn }) => {
-    const [list, setList] = useState<Media[]>([]);
+    const [list, setList] = useState<TmdbMovieInterface[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
