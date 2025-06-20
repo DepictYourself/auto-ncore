@@ -1,6 +1,6 @@
 import requests
 from infrastructure.config_service import ConfigService
-from models.tmdb import tmdb_discover_movie_response, TmdbTVSearchResponse, TmdbTVShowDetails, SortBy
+from models.tmdb import TmdbMovieDetails, tmdb_discover_movie_response, TmdbTVSearchResponse, TmdbTVShowDetails, SortBy
 
 
 class TmdbClient:
@@ -11,7 +11,8 @@ class TmdbClient:
     def _get_headers(self):
         return {
             "Authorization": f"Bearer {self.config['jwt']}",
-            "Content-Type": "application/json;charset=utf-8"
+            "Content-Type": "application/json;charset=utf-8",
+            "Accept": "application/json"
         }
 
     
@@ -73,4 +74,13 @@ class TmdbClient:
             },
             headers=self._get_headers()
         )
+        return response.json()
+    
+
+    def get_movie_details(self, id, language="en-US") -> TmdbMovieDetails:
+        url = self.config["url"] + f"/movie/{id}?language={language}"
+        headers = self._get_headers()
+        response = requests.get(url, headers=headers)
+        if( not response.ok):
+            raise Exception(response.json())
         return response.json()

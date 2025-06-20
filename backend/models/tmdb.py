@@ -22,6 +22,11 @@ class ProductionCompany(BaseModel):
     origin_country: str
 
 
+class ProductionCountry(BaseModel):
+    iso_31611_1: str
+    name: str
+
+
 class Season(BaseModel):
     air_date: Optional[str]
     episode_count: int
@@ -80,7 +85,7 @@ class TmdbTVShowDetails(BaseModel):
     popularity: float
     poster_path: Optional[str]
     production_companies: List[ProductionCompany]
-    production_countries: List  # Empty in your sample; define if used later
+    production_countries: List[ProductionCountry]
     seasons: List[Season]
     spoken_languages: List[SpokenLanguage]
     status: str
@@ -125,6 +130,34 @@ class TmdbMovie(BaseModel):
     popularity: float
     poster_path: str
     release_date: str
+    title: str
+    video: bool
+    vote_average: float
+    vote_count: int
+
+
+class TmdbMovieDetails(BaseModel):
+    adult: bool
+    backdrop_path: str
+    belongs_to_collection: str
+    budget: int
+    genres: List[Genre]
+    homepage: str
+    id: int
+    imdb_id: str
+    original_language: str
+    original_title: str
+    overview: str
+    popularity: int
+    poster_path: str
+    production_componies: List[ProductionCompany]
+    production_countries: List[ProductionCountry]
+    release_date: str
+    revenue: int
+    runtime: int
+    spoken_languages: List[SpokenLanguage]
+    status: str
+    tagline: str
     title: str
     video: bool
     vote_average: float
