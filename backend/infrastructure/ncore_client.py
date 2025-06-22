@@ -106,6 +106,7 @@ class NCoreClient:
     def get_torrent_info(self, id):
         self.login()
         return self.client.get_torrent(id)
+        
 
     def normalize_tvshow_title(self, title: str) -> str:
         return re.sub(r"[._-]+", " ", title).strip()

@@ -1,4 +1,5 @@
 from typing import List
+from urllib.parse import parse_qs
 from domain.torrent_category import TorrentCategory
 from infrastructure.config_service import ConfigService
 from infrastructure.ncore_client import NCoreClient
@@ -51,10 +52,9 @@ class TorrentClientService:
         return self.client.get_torrent(hash, fields)
     
     def add_torrent(self, request: AddTorrentRequest):
-        id = next(v for k, v in request.url.query_params if k == "id")
+        id = parse_qs(request.url.query)["id"][0]
         torrent = self.ncore_client.get_torrent_info(id)
-        category = self.kodi_dir_mapper.map_category(type=torrent.type)
-        print("add_torrent()", torrent_title_info)
+        category = self.kodi_dir_mapper.map_category(type=torrent["type"].value)
         download_dir = self.config_service.get_tranmission_config()['dir']
         subdir = "/"
         if(category == TorrentCategory.SHOW):
@@ -79,7 +79,7 @@ class TorrentClientService:
 
         download_dir += subdir
 
-        return self.client.add_torrent(request.url, dir=download_dir)
+        return self.client.add_torrent(str(request.url), dir=download_dir)
       
 
     def remove_torrent(self, ids: List[int | str]):

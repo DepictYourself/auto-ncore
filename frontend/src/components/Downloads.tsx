@@ -1,4 +1,4 @@
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState, type ChangeEvent } from "react";
 import {
   Button,
@@ -25,6 +25,8 @@ import type { NcoreTorrent } from "../types/ncore-torrent.interface";
 import { formatSize } from "../utils/format";
 
 const Downloads = () => {
+  const navigate = useNavigate();
+
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [torrents, setTorrents] = useState<TransmissionTorrent[]>([]);
@@ -43,7 +45,7 @@ const Downloads = () => {
   const getTorrentList = async (): Promise<
     { fields: TransmissionTorrent }[]
   > => {
-    const url = new URL(`/torrents`, import.meta.env.VITE_BACKEND_URL);
+    const url = new URL(`/torrents/`, import.meta.env.VITE_BACKEND_URL);
     const response = await fetch(url, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
@@ -63,8 +65,18 @@ const Downloads = () => {
   }, []);
 
   useEffect(() => {
-    setShowModal(true);
+    if (downloadUrl && tmdbId) {
+      setShowModal(true);
+    }
   }, [downloadUrl, tmdbId]);
+
+  useEffect(() => {
+  if (!downloadUrl || !tmdbId) {
+    setShowModal(false);
+    setNewTorrent(null);
+    setModalLoading(false);
+  }
+}, [downloadUrl, tmdbId]);
 
   useEffect(() => {
     const getDetailsFromTracker = async () => {
@@ -180,7 +192,19 @@ const Downloads = () => {
   };
 
   const addNewTorrent = async () => {
-    console.log("WIP");
+    const url = new URL(`/torrents/download`, import.meta.env.VITE_BACKEND_URL);
+    if(!(downloadUrl && tmdbId)) throw new Error("downloadUrl and tmdbId must be provided");
+    
+    await fetch(url, {
+      method: 'POST',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({url: downloadUrl, tmdbId: tmdbId})
+    });
+    
+    navigate(location.pathname, {replace: true});
+    setModalLoading(false);
+    setShowModal(false);
+    updateTorrents();
   };
 
   return (
@@ -323,7 +347,7 @@ const Downloads = () => {
               )}
             </ModalBody>
             <ModalFooter>
-              <Button onClick={() => setShowModal(false)}>Add</Button>
+              <Button onClick={addNewTorrent} disabled={!(downloadUrl && tmdbId)}>Add</Button>
               <Button color="alternative" onClick={() => setShowModal(false)}>
                 Cancel
               </Button>

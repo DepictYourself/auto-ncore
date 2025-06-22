@@ -99,7 +99,7 @@ const TorrentList: React.FC<TorrentListProps> = ({
                 <TableCell>
                   <Link
                     to={`/downloads?url=${encodeURIComponent(torrent.download)}
-                    &tmdbid=${tmdbId} `}
+                    &tmdbid=${tmdbId}`}
                   >
                     <Button className="cursor-pointer" color="light">
                       Download

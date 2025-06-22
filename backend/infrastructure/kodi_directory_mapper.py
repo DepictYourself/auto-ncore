@@ -16,7 +16,7 @@ class KodiDirectoryMapper(DownloadLocationMapper):
             # "dvd"
             # "dvd9_hun"
             # "dvd9"
-            # "hd_hun"
+            "hd_hun": TorrentCategory.MOVIE,
             "hd": TorrentCategory.MOVIE,
             "xvidser_hun": TorrentCategory.SHOW,
             "xvidser": TorrentCategory.SHOW,
