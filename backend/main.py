@@ -7,8 +7,10 @@ from api import movie, torrent, tracker
 app = FastAPI()
 
 origins = [
-    "http://localhost:5173"
-    # TODO: Add prod url later
+    "http://localhost:5173",
+    "http://192.168.0.2:85",
+    "http://localhost:85",
+    "http://asus:85"
 ]
 
 app.add_middleware(
