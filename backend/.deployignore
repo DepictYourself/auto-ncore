@@ -1,0 +1,13 @@
+.pytest_cache/
+.venv/
+__pycache__/
+*.pyc
+tests/
+docs/
+.vscode/
+.env
+deploy.ps1
+dev-requirements.txt
+Dockerfile
+example.env
+pytest.ini
