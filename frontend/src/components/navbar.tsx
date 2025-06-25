@@ -1,10 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
-  Avatar,
-  Dropdown,
-  DropdownDivider,
-  DropdownHeader,
-  DropdownItem,
   Navbar,
   NavbarBrand,
   NavbarCollapse,
@@ -42,10 +37,12 @@ const navbar = () => {
         <NavbarToggle />
       </div>
       <NavbarCollapse>
-        <NavbarLink as={Link} to="/" active>
-          Movies
+        <NavbarLink active>
+          <Link to="/">Movies</Link>
         </NavbarLink>
-        <NavbarLink as={Link} to="/downloads">Downloads</NavbarLink>
+        <NavbarLink >
+          <Link to="/downloads">Downloads</Link>
+        </NavbarLink>
       </NavbarCollapse>
     </Navbar>
   )
