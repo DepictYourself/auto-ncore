@@ -1,7 +1,7 @@
 #! python3.11
 from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
-from api import movie, torrent, tracker
+from api import movie, torrent, tracker, tvshow
 
 
 app = FastAPI()
@@ -25,6 +25,7 @@ app.add_middleware(
 app.include_router(torrent.router, prefix='/torrents', tags=["Torrent"])
 app.include_router(tracker.router, prefix='/tracker', tags=["Tracker"])
 app.include_router(movie.router, prefix='/movie', tags=["Movie"])
+app.include_router(tvshow.router, prefix='/tvshow', tags=["TvShow"])
 
 
 @app.get('/')

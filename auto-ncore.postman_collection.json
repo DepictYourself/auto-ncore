@@ -134,48 +134,6 @@
 			"response": []
 		},
 		{
-			"name": "torrents/test_tmdb",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:3000/torrents/test/Tess of the D'Urbervilles",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"torrents",
-						"test",
-						"Tess of the D'Urbervilles"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "torrents/show_details",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:3000/torrents/show_details/8042",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"torrents",
-						"show_details",
-						"8042"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "tracker/",
 			"request": {
 				"method": "GET",
@@ -272,6 +230,46 @@
 					"path": [
 						"movie",
 						"discover"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "movie/{tmdb_id}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/movie/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"movie",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tvshow/{tmdb_id}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/tvshow/60625",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"tvshow",
+						"60625"
 					]
 				}
 			},

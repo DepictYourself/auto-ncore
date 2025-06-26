@@ -1,7 +1,5 @@
-from fastapi import APIRouter, Response, status
-from fastapi.encoders import jsonable_encoder
-from fastapi.responses import JSONResponse
-from application.services import TorrentClientService
+from fastapi import APIRouter, Response
+from application.torrent_service import TorrentClientService
 from api.dtos.add_torrent_request import AddTorrentRequest
 from api.dtos.stop_torrents_request import StopTorrentsRequest
 from api.dtos.start_torrents_request import StartTorrentsRequest
@@ -48,12 +46,7 @@ def stop_torrent(request: StopTorrentsRequest) -> Response:
 @router.post('/start')
 def resume_torrent(req: StartTorrentsRequest) -> Response:
     return torrent_client_service.start_torrent(req.ids)
-    
 
-
-@router.get('/test/{query_string}')
-def test(query_string: str) -> Response:
-    return torrent_client_service.test_tmdb(query_string)
 
 
 @router.get('/show_details/{show_id}')

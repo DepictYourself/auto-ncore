@@ -102,41 +102,7 @@ class TorrentClientService:
         self.client.start_torrent(ids)
         return {"message": f"Torrents started successfully {ids}"}
     
-    def test_tmdb(self, query):
-        return self.tmdb_client.search_show(query)
-    
-    def test_show_details(self, tmdb_id):
-        return self.tmdb_client.get_show_details(tmdb_id)
+
+
     
 
-class TrackerService:
-    def __init__(self):
-        self.config_service = ConfigService()
-        self.client = NCoreClient(self.config_service)
-
-    def search_torrent(self, pattern: str, category: TorrentCategory):
-        return self.client.search_torrents(pattern, category)
-    
-    def list_torrents(self):
-        return self.client.list_torrents()
-    
-    def get_details(self, ncore_id):
-        return self.client.get_torrent_info(ncore_id)
-    
-    def shows(self, title: str):
-        return self.client.parse_tvshow_title(title)
-    
-
-class MovieService:
-    def __init__(self):
-        self.config_service = ConfigService()
-        self.client = TmdbClient(self.config_service)
-
-    def discover_movies(self):
-        results = self.client.discover_movies(adult=False, include_video=False, page=1)["results"]
-        return results
-    
-
-    def get_movie_details(self, tmdb_id: int):
-        results = self.client.get_movie_details(tmdb_id)
-        return results

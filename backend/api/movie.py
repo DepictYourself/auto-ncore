@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Response
-from application.services import MovieService
+from application.movie_service import MovieService
 
 
 router = APIRouter()

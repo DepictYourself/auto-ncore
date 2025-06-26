@@ -1,5 +1,5 @@
-from fastapi import APIRouter, Response
-from application.services import TrackerService
+from fastapi import APIRouter
+from application.tracker_service import TrackerService
 from domain.torrent_category import TorrentCategory
 
 router = APIRouter()
@@ -19,7 +19,3 @@ def search_ncore(pattern: str):
 @router.get('/{ncore_id}')
 def get_one(ncore_id):
     return tracker_client_service.get_details(ncore_id)
-    
-@router.get('/test/{title}')
-def test(title: str):
-    return tracker_client_service.shows(title)
