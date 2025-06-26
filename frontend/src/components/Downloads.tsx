@@ -284,8 +284,8 @@ const Downloads = () => {
                     {torrent.name}
                   </TableCell>
                   <TableCell>{TorrentStatus[torrent.status]}</TableCell>
-                  <TableCell>{torrent.percentDone} %</TableCell>
-                  <TableCell>{torrent.totalSize}</TableCell>
+                  <TableCell>{(torrent.percentDone * 100).toFixed(0)} %</TableCell>
+                  <TableCell>{formatSize(torrent.totalSize)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
