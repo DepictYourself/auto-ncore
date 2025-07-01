@@ -17,7 +17,6 @@ import {
   Label,
   TextInput,
 } from "flowbite-react";
-import Navbar from "./navbar";
 import type { TransmissionTorrent } from "../types/TransmissionTorrent";
 import { TorrentStatus } from "../types/TorrentStatus";
 import { HiMiniStop, HiMiniPlay, HiMiniTrash } from "react-icons/hi2";
@@ -209,8 +208,6 @@ const Downloads = () => {
 
   return (
     <>
-      <Navbar />
-
       {isLoading ? (
         <div className="flex justify-center items-center py-8">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>

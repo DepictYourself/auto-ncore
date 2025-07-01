@@ -6,9 +6,13 @@ import {
   NavbarLink,
   NavbarToggle,
 } from "flowbite-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
-const navbar = () => {
+
+const NavbarComponent = () => {
+  const location = useLocation();
+  const currentPath = location.pathname;
+  
   return (
     <Navbar fluid>
       <NavbarBrand href="/">
@@ -37,10 +41,10 @@ const navbar = () => {
         <NavbarToggle />
       </div>
       <NavbarCollapse>
-        <NavbarLink active>
+        <NavbarLink active={currentPath === "/"}>
           <Link to="/">Movies</Link>
         </NavbarLink>
-        <NavbarLink >
+        <NavbarLink active={currentPath === "/downloads"}>
           <Link to="/downloads">Downloads</Link>
         </NavbarLink>
       </NavbarCollapse>
@@ -48,4 +52,4 @@ const navbar = () => {
   )
 }
 
-export default navbar
+export default NavbarComponent

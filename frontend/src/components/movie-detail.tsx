@@ -1,7 +1,6 @@
 import { useLocation } from "react-router-dom";
 import tmdbGenres from "../data/tmdbgenre.json";
 import { Badge } from "flowbite-react";
-import Navbar from "./navbar";
 import TorrentList from "./torrent-list";
 import type TmdbMovieInterface from "../types/tmdb-movie.interface";
 
@@ -28,8 +27,6 @@ const MovieDetail = () => {
 
   return (
     <>
-      <Navbar />
-
       <div
         className="relative w-full h-[500px] mb-16 bg-cover bg-center"
         style={{
