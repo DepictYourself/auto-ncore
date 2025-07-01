@@ -37,22 +37,22 @@ const Strip: React.FC<StripProps> = ({ title, fetchFn }) => {
     return (
         <div className="py-4 px-2">
             {title && <h2 className="text-xl font-bold mb-2">{title}</h2>}
-            <div className="overflow-x-auto whitespace-nowrap">
+            <div className="overflow-x-auto whitespace-nowrap px-2">
                 <div className="flex gap-4 py-6">
 
                     {list.map((item) => (
                         <div
                             key={item.id}
                             className="flex bg-white dark:border-gray-800 shadow-lg flex-col 
-                            w-1/5 max-w-[300px] flex-shrink-0 rounded-lg overflow-hidden"
+                            w-48 sm:w-52 flex-shrink-0 rounded-lg overflow-hidden"
                         >
                             <Link to={`/movie/${item.id}`} state={{movie: item}}>
                                 <img 
                                     src={`${import.meta.env.VITE_TMDB_IMG_URL}/w300${item.poster_path}`}
                                     alt={`${item.title} poster`}
-                                    className="object-cover"
+                                    className="object-cover w-full h-72"
                                 />
-                                <div className="p-4">
+                                <div className="p-4 hidden sm:block">
                                     <h5 className="mb-1 text-xl font-semibold tracking-tight text-gray-900 ">
                                         {item.title}
                                     </h5>
