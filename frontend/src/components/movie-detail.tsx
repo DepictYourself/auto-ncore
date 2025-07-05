@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import tmdbGenres from "../data/tmdbgenre.json";
+import tmdbGenres from "../data/tmdbmoviegenres.json";
 import { Badge } from "flowbite-react";
 import TorrentList from "./torrent-list";
 import type TmdbMovieInterface from "../types/tmdb-movie.interface";

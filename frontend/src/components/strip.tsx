@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import type TmdbMovieInterface from "../types/tmdb-movie.interface";
+import type { TmdbTvShowInterface } from "../types/tmdb-tvshow.interface";
 
 type StripProps = {
     title?: string;
@@ -8,11 +9,17 @@ type StripProps = {
 };
 
 const Strip: React.FC<StripProps> = ({ title, fetchFn }) => {
-    const [list, setList] = useState<TmdbMovieInterface[]>([]);
+    const [list, setList] = useState<TmdbMovieInterface[] | TmdbTvShowInterface[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    const isMovie = (item: TmdbMovieInterface | TmdbTvShowInterface):item is TmdbMovieInterface => {
+      return (item as TmdbMovieInterface).title !== undefined;
+    }
 
+    const getDisplayName = (item: TmdbMovieInterface | TmdbTvShowInterface) => {
+      return isMovie(item) ? item.title : item.name;
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -49,12 +56,12 @@ const Strip: React.FC<StripProps> = ({ title, fetchFn }) => {
                             <Link to={`/movie/${item.id}`} state={{movie: item}}>
                                 <img 
                                     src={`${import.meta.env.VITE_TMDB_IMG_URL}/w300${item.poster_path}`}
-                                    alt={`${item.title} poster`}
+                                    alt={getDisplayName(item)}
                                     className="object-cover w-full h-72"
                                 />
                                 <div className="p-4 hidden sm:block">
                                     <h5 className="mb-1 text-xl font-semibold tracking-tight text-gray-900 ">
-                                        {item.title}
+                                        {getDisplayName(item)}
                                     </h5>
                                     <div className="flex items-center">
                                         <svg 
@@ -82,3 +89,4 @@ const Strip: React.FC<StripProps> = ({ title, fetchFn }) => {
 };
 
 export default Strip;
+

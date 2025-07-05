@@ -4,7 +4,7 @@ import Downloads from "./components/Downloads";
 import MovieDetail from "./components/movie-detail";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import NotFoundPage from "./components/not-found-page";
-import NavbarComponent from "./components/navbar";
+import NavbarComponent from "./components/Navbar";
 
 function App() {
   return (

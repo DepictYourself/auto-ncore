@@ -41,11 +41,15 @@ const NavbarComponent = () => {
         <NavbarToggle />
       </div>
       <NavbarCollapse>
-        <NavbarLink active={currentPath === "/"}>
-          <Link to="/">Movies</Link>
+        <NavbarLink as="span" active={currentPath === "/"}>
+          <Link to="/">
+            Movies
+          </Link>
         </NavbarLink>
-        <NavbarLink active={currentPath === "/downloads"}>
-          <Link to="/downloads">Downloads</Link>
+        <NavbarLink as="span" active={currentPath === "/downloads"}>
+          <Link to="/downloads">
+            Downloads
+          </Link>
         </NavbarLink>
       </NavbarCollapse>
     </Navbar>

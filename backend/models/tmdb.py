@@ -136,6 +136,21 @@ class TmdbMovie(BaseModel):
     vote_count: int
 
 
+class TmdbTvShow(BaseModel):
+    backdrop_path: Optional[str]
+    first_air_date: Optional[str]
+    genre_ids: List[int]
+    id: int
+    name: str
+    origin_country: List[str]
+    original_language: str
+    overview: str
+    popularity: float
+    poster_path: Optional[str]
+    vote_average: float
+    vote_count: int
+
+
 class TmdbMovieDetails(BaseModel):
     adult: bool
     backdrop_path: str
@@ -167,6 +182,13 @@ class TmdbMovieDetails(BaseModel):
 class tmdb_discover_movie_response(BaseModel):
     page: int
     results: List[TmdbMovie]
+    total_pages: int
+    total_results: int
+
+
+class tmdb_discover_tvshow_response(BaseModel):
+    page: int
+    results: List[TmdbTvShow]
     total_pages: int
     total_results: int
 
